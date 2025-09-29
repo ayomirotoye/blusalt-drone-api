@@ -16,7 +16,7 @@ pnpm-debug.log*
 logs
 *.log
 
-# Runtime data
+# Runtime db
 pids
 *.pid
 *.seed
