@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {
-  getAvailableDrones,
+  getAvailableDrones, getBatteryLevel,
   getDrones,
   loadMedications,
   registerDrone,
@@ -15,6 +15,7 @@ const router = Router();
 router.post('/', droneRegisterValidationRules, doValidation, registerDrone);
 router.get('/', getDrones);
 router.get('/available', getAvailableDrones);
+router.get('/:droneSerialNumber/battery-level', getBatteryLevel);
 router.get('/:droneSerialNumber/medications', getMedicationsByDroneSerialNumber);
 router.put('/:droneSerialNumber/medications', loadingRequestValidationRules, doValidation, loadMedications);
 
