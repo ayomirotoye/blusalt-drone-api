@@ -1,8 +1,7 @@
 import { body } from 'express-validator';
 import { DroneModel } from '../enums/drone-model';
-import { DroneState } from '../enums/drone-state';
 
-export const droneValidationRules = [
+export const droneRegisterValidationRules = [
   body('serialNumber')
     .isString()
     .isLength({ min: 1, max: 100 })
@@ -19,8 +18,4 @@ export const droneValidationRules = [
   body('batteryCapacity')
     .isInt({ min: 0, max: 100 })
     .withMessage('Battery capacity must be between 0 and 100'),
-
-  body('droneState')
-    .isIn(Object.values(DroneState))
-    .withMessage('Invalid drone state. Allowed drone states are : ' + Object.values(DroneState)),
 ];

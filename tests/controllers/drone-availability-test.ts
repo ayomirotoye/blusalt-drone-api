@@ -41,7 +41,7 @@ describe('Drone Controller Availability Check', () => {
 
         expect(zerothIndexDrone.id).toBe('53b800db-a6d0-4baf-9ef1-15fee35d116e');
         expect(zerothIndexDrone.serialNumber).toBe("DRONE-0001");
-        expect(zerothIndexDrone.model).toBe('LIGHTWEIGHT');
+        expect(zerothIndexDrone.model).toBe('Lightweight');
         expect(zerothIndexDrone.weightLimit).toBe(100);
         expect(zerothIndexDrone.batteryCapacity).toBe(85);
         expect(zerothIndexDrone.droneState).toBe('IDLE');
