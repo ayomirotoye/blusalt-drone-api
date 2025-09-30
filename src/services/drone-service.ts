@@ -8,6 +8,8 @@ import {Medication} from "../models/medication";
 import {DroneRegisterRequest} from "../models/requests/drone-register-requests";
 import {DroneState} from "../enums/drone-state";
 
+const batteryLevelMinimum = process.env.MINIMUM_BATTERY_CAPACITY ?? 25
+
 export const getAvailableDrones = () => {
     let query = `SELECT *
                  FROM drones
@@ -106,6 +108,10 @@ export const loadMedications = async (
         throw new ApiError(404, `Drone with ${droneSerialNumber} not found`);
     }
     const drone = droneResult[0];
+
+    if (drone.batteryCapacity < Number((batteryLevelMinimum))) {
+        throw new ApiError(422, `Battery level too low to load medications. Required level: ${batteryLevelMinimum}%`);
+    }
 
     const currentMedications = medicationService.getByDroneId(drone.id);
     const currentWeight = currentMedications.reduce(

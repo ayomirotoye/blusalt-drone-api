@@ -75,8 +75,8 @@ describe('Drone Controller Loading', () => {
 
     it('should not load a drone with medications that exceed its weight limit directly', async () => {
         const loadingRequest = [
-            { medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05c' },
-            { medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05d' },
+            {medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05c'},
+            {medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05d'},
         ];
 
         (droneService.loadMedications as jest.Mock).mockRejectedValue(
@@ -93,7 +93,7 @@ describe('Drone Controller Loading', () => {
 
     it('should not load a drone with medications if existing + new exceed capacity', async () => {
         const loadingRequest = [
-            { medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05f' },
+            {medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05f'},
         ];
 
         (droneService.loadMedications as jest.Mock).mockRejectedValue(
@@ -106,6 +106,24 @@ describe('Drone Controller Loading', () => {
 
         expect(res.status).toBe(400);
         expect(res.body.message).toContain('Weight limit exceeded');
+    });
+
+    it('should not load a drone with medications if battery level is below minimum', async () => {
+        const loadingRequest = [
+            {medicationId: '38eb24dc-d878-4f09-be7c-d8025ba9d05f'},
+        ];
+
+        // Mock the service to reject with battery error
+        (droneService.loadMedications as jest.Mock).mockRejectedValue(
+            new ApiError(422, 'Battery level too low to load medications')
+        );
+
+        const res = await request(app)
+            .put('/api/v1/drones/DRONE-007/medications')
+            .send(loadingRequest);
+
+        expect(res.status).toBe(422);
+        expect(res.body.message).toContain('Battery level too low');
     });
 
 });
