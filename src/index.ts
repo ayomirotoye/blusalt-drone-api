@@ -1,10 +1,11 @@
-import express, { Request, Response } from 'express';
+import express, {Request, Response} from 'express';
 import dotenv from 'dotenv';
 import v1DroneApiRouter from './routes/v1/drone-routes';
-import { errorHandler } from './middlewares/error-handler';
-import { notFoundHandler } from './middlewares/not-found-handler';
+import {errorHandler} from './middlewares/error-handler';
+import {notFoundHandler} from './middlewares/not-found-handler';
 import router from './routes/v1/drone-routes';
-import './data/seed-medications'; // seeding medications for Proof of Concept (PoC) use case
+import {seedMedications} from "./data/seed-medications";
+
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const PORT: number = Number(process.env.PORT) || 3000;
 app.use(express.json());
 
 router.get('/', (_req: Request, res: Response) => {
-  res.send('<h2>Welcome to Blusalt Drone Service</h2>');
+    res.send('<h2>Welcome to Blusalt Drone Service</h2>');
 });
 
 app.use('/api/v1/drones', v1DroneApiRouter);
@@ -24,9 +25,10 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
-  });
+    seedMedications() // seeding medications for Proof of Concept (PoC) use case
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
 }
 
 export default app;

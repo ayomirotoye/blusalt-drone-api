@@ -9,3 +9,14 @@ export interface Drone {
   batteryCapacity: number;
   droneState: DroneState;
 }
+
+export const droneEntityMapper = (row: any): Drone => {
+  return {
+    id: row.id,
+    serialNumber: row.serial_number,
+    model: row.model as DroneModel,
+    weightLimit: row.weight_limit,
+    batteryCapacity: row.battery_capacity,
+    droneState: row.drone_state as DroneState,
+  };
+};

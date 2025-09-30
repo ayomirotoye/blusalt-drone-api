@@ -17,12 +17,12 @@ describe('Drone Controller Registering', () => {
             model: DroneModel.Middleweight,
             weightLimit: 200,
             batteryCapacity: 90,
-            droneState: DroneState.Idle,
         };
 
         (droneService.registerDrone as jest.Mock).mockReturnValue({
             ...registerDroneRequest,
-            id: "53b800db-a6d0-4baf-9ef1-15fee35d116e"
+            id: "53b800db-a6d0-4baf-9ef1-15fee35d116e",
+            droneState: DroneState.Loading,
         });
 
         const res = await request(app).post('/api/v1/drones').send(registerDroneRequest);
@@ -31,7 +31,7 @@ describe('Drone Controller Registering', () => {
         expect(res.body.data.serialNumber).toBe('DRONE-100');
         expect(res.body.data.model).toBe(DroneModel.Middleweight);
         expect(res.body.data.weightLimit).toBe(200);
-        expect(res.body.data.droneState).toBe(DroneState.Idle);
+        expect(res.body.data.droneState).toBe(DroneState.Loading);
     });
 
     it('should fail when required parameters are not provided', async () => {
@@ -39,7 +39,6 @@ describe('Drone Controller Registering', () => {
             model: DroneModel.Middleweight,
             weightLimit: 200,
             batteryCapacity: 90,
-            droneState: DroneState.Idle,
         };
 
         const res = await request(app).post('/api/v1/drones').send(registerDroneRequest);

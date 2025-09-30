@@ -11,12 +11,34 @@ const medications = [
     {id: uuidv4(), weight: 45, code: 'MED_004', image: 'chloroquine.png', name: 'Chloroquine'},
 ];
 
-for (const med of medications) {
-    db.prepare(`
-        INSERT
-        OR IGNORE INTO medications (id, weight, code, image, name)
+const runSeeding = () => {
+    for (const med of medications) {
+        db.prepare(`
+            INSERT
+            OR IGNORE INTO medications (id, weight, code, image, name)
     VALUES (@id, @weight, @code, @image, @name)
-    `).run(med);
+        `).run(med);
+    }
 }
 
-console.log('Medications seeded successfully');
+export const seedMedications = () => {
+
+    if (process.env.NODE_ENV === 'test') {
+        console.log('[Seed] Skipped (NODE_ENV=test)');
+        return;
+    }
+    const stmt = db.prepare<{ c: number }>('SELECT COUNT(*) as c FROM medications');
+    // @ts-ignore
+    const row = stmt.get();
+    // @ts-ignore
+    const count = row?.c ?? 0;
+
+    if (count > 0) {
+        console.log('[Seed] Medications already exist, skipping...');
+        return;
+    }
+
+    runSeeding();
+
+    console.log('Medications seeded successfully');
+}

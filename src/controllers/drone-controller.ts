@@ -3,7 +3,7 @@ import * as droneService from '../services/drone-service';
 
 export const registerDrone = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const registerResult = await droneService.registerDrone(req.body);
+        const registerResult = droneService.registerDrone(req.body);
         res.status(201).json({success: true, data: registerResult});
     } catch (error) {
         next(error);
