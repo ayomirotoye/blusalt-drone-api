@@ -1,9 +1,9 @@
-import express, {Request, Response} from 'express';
+import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import v1DroneApiRouter from './routes/v1/drone-routes';
 import { errorHandler } from './middlewares/error-handler';
 import { notFoundHandler } from './middlewares/not-found-handler';
-import router from "./routes/v1/drone-routes";
+import router from './routes/v1/drone-routes';
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Routes
 router.get('/', (_req: Request, res: Response) => {
-  res.send("<h2>Welcome to Blusalt Drone Service</h2>");
+  res.send('<h2>Welcome to Blusalt Drone Service</h2>');
 });
 
 app.use('/api/v1/drones', v1DroneApiRouter);

@@ -36,3 +36,8 @@ Thumbs.db
 # Coverage / testing
 coverage/
 .nyc_output/
+
+# Ignore local database files
+*.db
+*.sqlite
+*.sqlite3
