@@ -29,6 +29,13 @@ db.exec(`
     FOREIGN KEY (drone_id) REFERENCES drones(id) ON DELETE CASCADE,
     FOREIGN KEY (medication_id) REFERENCES medications(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS battery_audit_logs (
+    id TEXT PRIMARY KEY,
+    drone_id TEXT NOT NULL,
+    battery_capacity INTEGER NOT NULL,
+    checked_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 export default db;
