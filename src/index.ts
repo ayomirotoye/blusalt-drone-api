@@ -4,16 +4,15 @@ import v1DroneApiRouter from './routes/v1/drone-routes';
 import { errorHandler } from './middlewares/error-handler';
 import { notFoundHandler } from './middlewares/not-found-handler';
 import router from './routes/v1/drone-routes';
+import './data/seed-medications'; // seeding medications for Proof of Concept (PoC) use case
 
 dotenv.config();
 
 const app = express();
 const PORT: number = Number(process.env.PORT) || 3000;
 
-// Middleware for JSON
 app.use(express.json());
 
-// Routes
 router.get('/', (_req: Request, res: Response) => {
   res.send('<h2>Welcome to Blusalt Drone Service</h2>');
 });

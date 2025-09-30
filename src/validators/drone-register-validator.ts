@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 import { DroneModel } from '../enums/drone-model';
 import { DroneState } from '../enums/drone-state';
 
-export const droneValidationRules = [
+export const droneRegisterValidationRules = [
   body('serialNumber')
     .isString()
     .isLength({ min: 1, max: 100 })

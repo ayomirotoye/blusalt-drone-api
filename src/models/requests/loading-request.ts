@@ -1,3 +1,6 @@
+import {Medication} from "../medication";
+
 export interface LoadingRequest {
-  medicationId: string;
+    medicationIds?: string[]
+    medications?: Medication[];
 }

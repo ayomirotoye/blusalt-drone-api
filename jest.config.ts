@@ -8,5 +8,6 @@ export default async (): Promise<Config> => {
         transform: {
             "^.+\\.(ts|tsx)$": "ts-jest",
         },
+        setupFilesAfterEnv: ['./jest.setup.ts'],
     };
 };
