@@ -16,6 +16,18 @@ export const getAvailableDrones = () => {
     return rows.map(droneEntityMapper)
 }
 
+export const getBatteryLevel = (droneSerialNumber: string) => {
+    let query = `SELECT *
+                 FROM drones
+                 WHERE serial_number = ? `;
+    const row = db.prepare(query).get(droneSerialNumber);
+    if (row) {
+        return droneEntityMapper(row)?.batteryCapacity
+    } else {
+        throw new ApiError(404, "Drone information not available")
+    }
+}
+
 export const getDrones = ({
                               state,
                               batteryLevel,

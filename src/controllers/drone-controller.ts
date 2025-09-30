@@ -27,12 +27,26 @@ export const getDrones = async (
 
 export const getAvailableDrones = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const availableDrones =  droneService.getAvailableDrones();
+        const availableDrones = droneService.getAvailableDrones();
         res.json({success: true, data: availableDrones});
     } catch (error) {
         next(error);
     }
 };
+
+export const getBatteryLevel = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const droneBatteryLevel = droneService.getBatteryLevel(req.params.droneSerialNumber);
+        res.json({
+            success: true,
+            data: {
+                batteryLevel: droneBatteryLevel
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 export const loadMedications = async (req: Request, res: Response, next: NextFunction) => {
     try {
