@@ -23,7 +23,7 @@ describe('Drone Controller Filtering', () => {
             droneState: DroneState.Idle,
         }];
 
-        (droneService.getDrones as jest.Mock).mockResolvedValue(droneResultByBatteryLevel);
+        (droneService.getDrones as jest.Mock).mockReturnValue(droneResultByBatteryLevel);
 
         const response = await request(app).get('/api/v1/drones?batteryLevel=25');
         expect(response.status).toBe(200);
@@ -52,7 +52,7 @@ describe('Drone Controller Filtering', () => {
                 droneState: DroneState.Loaded,
             }
         ];
-        (droneService.getDrones as jest.Mock).mockResolvedValue(droneResultByState);
+        (droneService.getDrones as jest.Mock).mockReturnValue(droneResultByState);
 
         const response = await request(app).get('/api/v1/drones?state=IDLE');
         expect(response.status).toBe(200);
@@ -89,7 +89,7 @@ describe('Drone Controller Filtering', () => {
                 droneState: DroneState.Loading,
             }
         ];
-        (droneService.getDrones as jest.Mock).mockResolvedValue(droneResultByMultipleFilters);
+        (droneService.getDrones as jest.Mock).mockReturnValue(droneResultByMultipleFilters);
 
         const response = await request(app).get('/api/v1/drones?state=LOADING&model=MIDDLEWEIGHT');
         expect(response.status).toBe(200);

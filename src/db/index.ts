@@ -33,7 +33,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS battery_audit_logs (
     id TEXT PRIMARY KEY,
     drone_id TEXT NOT NULL,
-    battery_capacity INTEGER NOT NULL,
+    battery_level INTEGER NOT NULL,
     checked_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `);
