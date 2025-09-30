@@ -14,7 +14,7 @@ export const getDrones = async (
     {query: {state, batteryLevel, model}}: Request, res: Response, next: NextFunction
 ) => {
     try {
-        const dronesResult = await droneService.getDrones({
+        const dronesResult = droneService.getDrones({
             state: state as string | undefined,
             batteryLevel: batteryLevel ? Number(batteryLevel) : undefined,
             model: model as string | undefined,
