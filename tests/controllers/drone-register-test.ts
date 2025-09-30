@@ -20,7 +20,7 @@ describe('Drone Controller Registering', () => {
             droneState: DroneState.Idle,
         };
 
-        (droneService.registerDrone as jest.Mock).mockResolvedValue({
+        (droneService.registerDrone as jest.Mock).mockReturnValue({
             ...registerDroneRequest,
             id: "53b800db-a6d0-4baf-9ef1-15fee35d116e"
         });

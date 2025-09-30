@@ -6,12 +6,28 @@ const db = new Database(path.resolve(__dirname, '../../drone.db'));
 db.exec(`
   CREATE TABLE IF NOT EXISTS drones (
     id STRING PRIMARY KEY,
-    serialNumber TEXT NOT NULL,
+    serial_number TEXT NOT NULL,
     model TEXT NOT NULL,
-    weightLimit INTEGER NOT NULL CHECK (weightLimit <= 500),
-    batteryCapacity INTEGER NOT NULL CHECK (batteryCapacity >= 0 AND batteryCapacity <= 100),
-    droneState TEXT NOT NULL
-  )
+    weight_limit INTEGER NOT NULL CHECK (weight_limit <= 500),
+    battery_capacity INTEGER NOT NULL CHECK (battery_capacity >= 0 AND battery_capacity <= 100),
+    drone_state TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS medications (
+     id TEXT PRIMARY KEY,
+     name TEXT NOT NULL,
+     weight INTEGER NOT NULL,
+     code TEXT NOT NULL,
+     image TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS drone_medications (
+    drone_id TEXT NOT NULL,
+    medication_id TEXT NOT NULL,
+    PRIMARY KEY (drone_id, medication_id),
+    FOREIGN KEY (drone_id) REFERENCES drones(id) ON DELETE CASCADE,
+    FOREIGN KEY (medication_id) REFERENCES medications(id) ON DELETE CASCADE
+  );
 `);
 
 export default db;

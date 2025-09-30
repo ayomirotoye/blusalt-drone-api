@@ -7,9 +7,8 @@ export const getMedicationsByDroneSerialNumber = async (
   next: NextFunction,
 ) => {
   try {
-    const medications = await medicationService.getMedicationsByDroneSerialNumber(
-      req.params.droneSerialNumber,
-    );
+    console.log('getMedicationsByDroneSerialNumber::'+req.params.droneSerialNumber);
+    const medications = medicationService.getByDroneSerialNumber(req.params.droneSerialNumber,);
     res.json({ success: true, data: medications });
   } catch (error) {
     next(error);
