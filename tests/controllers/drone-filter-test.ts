@@ -125,9 +125,11 @@ describe('Drone Controller Filtering', () => {
             }
         ];
 
-        (medicationService.getMedicationsByDroneSerialNumber as jest.Mock).mockResolvedValue(loadedMedicationsForDrone);
+        (medicationService.getByDroneSerialNumber as jest.Mock).mockReturnValue(loadedMedicationsForDrone);
 
         const response = await request(app).get('/api/v1/drones/DRONE-001/medications');
+
+        console.log("Response::: ", JSON.stringify(response));
 
         expect(response.status).toBe(200);
         expect(response.body.data.length > 0).toBe(true);

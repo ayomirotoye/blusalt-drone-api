@@ -11,7 +11,7 @@ export async function getAvailableDrones() {
 export const getDrones = async (req: Request) => {
     const {state, batteryLevel, model} = req.query;
     let result: Drone[] = [];
-    // Filter by state
+
     if (state) {
         result = result.filter((d) => d.droneState === state.toString().toUpperCase());
     }
@@ -30,11 +30,11 @@ export const getDrones = async (req: Request) => {
     return result;
 };
 
-export const registerDrone = async (registerDrone: Drone) => {
+export const registerDrone = (registerDrone: Drone) => {
     const id = uuidv4();
     const updatedRequest = {...registerDrone, id: id}
     db.prepare(`
-        INSERT INTO drones (id, serialNumber, model, weightLimit, batteryCapacity, droneState)
+        INSERT INTO drones (id, serial_number, model, weight_limit, battery_capacity, drone_state)
         VALUES (@id, @serialNumber, @model, @weightLimit, @batteryCapacity, @droneState)
     `).run(updatedRequest);
     return updatedRequest;
