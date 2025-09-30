@@ -23,7 +23,7 @@ describe('Drone Controller Availability Check', () => {
                 droneState: DroneState.Idle,
             }
         ];
-        (droneService.getAvailableDrones as jest.Mock).mockResolvedValue(mockDrones);
+        (droneService.getAvailableDrones as jest.Mock).mockReturnValue(mockDrones);
 
         const response = await request(app).get('/api/v1/drones/available');
         expect(response.status).toBe(200);
@@ -48,18 +48,7 @@ describe('Drone Controller Availability Check', () => {
     });
 
     it('return empty db when no available drones', async () => {
-        const mockDrones = [
-            {
-                id: "53b800db-a6d0-4baf-9ef1-15fee35d116e",
-                serialNumber: 'DRONE-0002',
-                model: DroneModel.Lightweight,
-                weightLimit: 100,
-                batteryCapacity: 85,
-                droneState: DroneState.Idle,
-            }
-        ];
-
-        (droneService.getAvailableDrones as jest.Mock).mockResolvedValue([]);
+        (droneService.getAvailableDrones as jest.Mock).mockReturnValue([]);
 
         const response = await request(app).get('/api/v1/drones/available');
         expect(response.status).toBe(200);

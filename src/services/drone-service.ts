@@ -8,8 +8,12 @@ import {Medication} from "../models/medication";
 import {DroneRegisterRequest} from "../models/requests/drone-register-requests";
 import {DroneState} from "../enums/drone-state";
 
-export async function getAvailableDrones() {
-    return [];
+export const getAvailableDrones = () => {
+    let query = `SELECT *
+                 FROM drones
+                 WHERE drone_state = ? `;
+    const rows = db.prepare(query).all(DroneState.Idle);
+    return rows.map(droneEntityMapper)
 }
 
 export const getDrones = ({
@@ -54,7 +58,7 @@ export const getDrones = ({
 
 export const registerDrone = (registerDrone: DroneRegisterRequest) => {
     const id = uuidv4();
-    const updatedRequest = {...registerDrone, id: id, droneState: DroneState.Loading}
+    const updatedRequest = {...registerDrone, id: id, droneState: DroneState.Idle}
     db.prepare(`
         INSERT INTO drones (id, serial_number, model, weight_limit, battery_capacity, drone_state)
         VALUES (@id, @serialNumber, @model, @weightLimit, @batteryCapacity, @droneState)

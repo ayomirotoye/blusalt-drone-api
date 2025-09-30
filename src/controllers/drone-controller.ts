@@ -27,7 +27,7 @@ export const getDrones = async (
 
 export const getAvailableDrones = async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const availableDrones = await droneService.getAvailableDrones();
+        const availableDrones =  droneService.getAvailableDrones();
         res.json({success: true, data: availableDrones});
     } catch (error) {
         next(error);
