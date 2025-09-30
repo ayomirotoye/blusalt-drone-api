@@ -1,3 +1,3 @@
 export interface LoadingRequest {
-    medicationId: string;
+  medicationId: string;
 }

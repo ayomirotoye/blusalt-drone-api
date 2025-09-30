@@ -15,7 +15,9 @@
   "include": [
     "src",
     "src/**/*.ts",
-    "tests/**/*.test.ts"
+    "tests/**/*.test.ts",
+    "jest.setup.ts",
+    "src/tests/types/jest-extended.d.ts"
   ],
   "exclude": [
     "node_modules",

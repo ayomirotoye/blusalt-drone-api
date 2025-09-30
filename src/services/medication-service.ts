@@ -1,9 +1,7 @@
-import {Request} from "express";
+import { Request } from 'express';
 
 export const getMedicationsByDroneSerialNumber = async (droneSerialNumber: string) => {
-    return []
-}
+  return [];
+};
 
-export const addMedication = async (id: string) => {
-
-}
+export const addMedication = async (id: string) => {};

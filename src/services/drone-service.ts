@@ -1,19 +1,19 @@
 import {Request} from 'express';
-import {Drone} from "../models/drone";
-import {LoadingRequest} from "../models/requests/loading-request";
+import {Drone} from '../models/drone';
+import {LoadingRequest} from '../models/requests/loading-request';
+import db from "../db";
+import {v4 as uuidv4} from 'uuid';
 
 export async function getAvailableDrones() {
-    return []
+    return [];
 }
 
 export const getDrones = async (req: Request) => {
     const {state, batteryLevel, model} = req.query;
-    let result: Drone[] = []
+    let result: Drone[] = [];
     // Filter by state
     if (state) {
-        result = result.filter(
-            (d) => d.droneState === state.toString().toUpperCase(),
-        );
+        result = result.filter((d) => d.droneState === state.toString().toUpperCase());
     }
 
     if (batteryLevel) {
@@ -24,29 +24,28 @@ export const getDrones = async (req: Request) => {
     }
 
     if (model) {
-        result = result.filter(
-            (d) => d.model === model.toString().toUpperCase(),
-        );
+        result = result.filter((d) => d.model === model.toString().toUpperCase());
     }
 
     return result;
-}
+};
 
-export const registerDrone  = async (registerDrone: Drone) => {
-    return {
-
-    }
-}
+export const registerDrone = async (registerDrone: Drone) => {
+    const id = uuidv4();
+    const updatedRequest = {...registerDrone, id: id}
+    db.prepare(`
+        INSERT INTO drones (id, serialNumber, model, weightLimit, batteryCapacity, droneState)
+        VALUES (@id, @serialNumber, @model, @weightLimit, @batteryCapacity, @droneState)
+    `).run(updatedRequest);
+    return updatedRequest;
+};
 
 export const getDroneBySerialNumber = async (serialNumber: string) => {
     return {
         serialNumber: serialNumber,
-    }
-}
+    };
+};
 
-export const loadMedications  = async (loadMedicationRequest: LoadingRequest[]) => {
-    return {
-
-    }
-}
-
+export const loadMedications = async (loadMedicationRequest: LoadingRequest[]) => {
+    return {};
+};
