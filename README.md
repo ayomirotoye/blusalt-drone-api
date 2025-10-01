@@ -36,12 +36,13 @@ npm run dev
 
 This will start the server on `http://localhost:3000`.
 
-To build and run the application in production mode, use the following commands:
+## API Documentation
 
-```sh
-npm run build
-npm start
-```
+Once the application is running, you can access the API documentation (Swagger UI) at:
+
+`http://localhost:3000/api-docs`
+
+This interface allows you to explore the available API endpoints, their parameters, and expected responses. You can also test the API calls directly from the browser.
 
 ## Running the Tests
 
