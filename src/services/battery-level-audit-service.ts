@@ -10,7 +10,7 @@ export const auditDroneBatteries = () => {
       const id = uuidv4();
       db.prepare(
         `INSERT INTO battery_audit_logs (id, drone_id, battery_level, checked_at)
-                 VALUES (?, ?, ?)`,
+                 VALUES (?, ?, ?, ?)`,
       ).run(id, drone.id, drone.battery_capacity, new Date().toISOString());
     }
 

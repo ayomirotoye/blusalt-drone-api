@@ -1,5 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 
+const PORT: number = Number(process.env.PORT) || 3000;
+
 const options: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
@@ -10,22 +12,20 @@ const options: swaggerJSDoc.Options = {
         'This is a simple CRUD API application made with Express and documented with Swagger. It is a drone service for a medication delivery system.',
       contact: {
         name: 'Ayomide Akinrotoye',
-        url: 'https://www.ayomideakinrotoye.com',
-        email: 'akinrotoyeayomide@gmail.com',
-      },
-      license: {
-        name: 'MIT',
-        url: 'https://spdx.org/licenses/MIT.html',
+        email: 'ayomirotoye@gmail.com',
       },
     },
     externalDocs: {
       description: 'Find out more about the project',
-      url: 'https://github.com/ayomide-akinrotoye/blusalt-drone-api',
+      url: 'https://github.com/ayomirotoye/blusalt-drone-api',
     },
     servers: [
       {
-        url: 'http://localhost:5003',
-        description: 'Development server',
+        url:
+          process.env.NODE_ENV === 'development'
+            ? `http://localhost:${PORT}`
+            : process.env.BASE_URL,
+        description: process.env.NODE_ENV === 'development' ? 'Development server' : 'Api Server',
       },
     ],
   },

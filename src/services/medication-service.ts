@@ -15,7 +15,8 @@ export const getById = (medicationId: string) => {
     .get(medicationId) as Medication;
 };
 
-export const getByDroneSerialNumber = (droneSerialNumber: string) => {
+export const getByDroneSerialNumber = (droneSerialNumber: string, page = 1, limit = 10) => {
+  const offset = (page - 1) * limit;
   const rows = db
     .prepare(
       `
@@ -24,11 +25,27 @@ export const getByDroneSerialNumber = (droneSerialNumber: string) => {
                  JOIN drone_medications dm ON m.id = dm.medication_id
                  JOIN drones d ON dm.drone_id = d.id
         WHERE d.serial_number = ?
+        LIMIT ? OFFSET ?
     `,
     )
-    .all(droneSerialNumber);
+    .all(droneSerialNumber, limit, offset);
 
   return rows as Medication[];
+};
+
+export const getTotalMedicationsByDroneSerialNumberCount = (droneSerialNumber: string): number => {
+  const result = db
+    .prepare(
+      `
+        SELECT COUNT(*) as count
+        FROM medications m
+                 JOIN drone_medications dm ON m.id = dm.medication_id
+                 JOIN drones d ON dm.drone_id = d.id
+        WHERE d.serial_number = ?
+    `,
+    )
+    .get(droneSerialNumber) as { count: number };
+  return result.count;
 };
 
 export const getByDroneId = (droneId: string) => {

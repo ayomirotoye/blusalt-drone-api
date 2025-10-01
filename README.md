@@ -71,6 +71,7 @@ The following environment variables can be configured in a `.env` file:
 
 *   `PORT`: The port the server will run on (default: `3000`).
 *   `DRONE_BATTERY_AUDIT_CRON`: The cron expression for the battery level audit job (default: `*/5 * * * *`).
+*   `NODE_ENV`: The environment in which the server is running e.g. development, test, production
 
 ## Cron Jobs
 
