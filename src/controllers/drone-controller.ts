@@ -11,26 +11,55 @@ export const registerDrone = async (req: Request, res: Response, next: NextFunct
 };
 
 export const getDrones = async (
-  { query: { state, batteryLevel, model } }: Request,
+  { query: { state, batteryLevel, model, page, limit } }: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    const pageNumber = page ? Number(page) : 1;
+    const limitNumber = limit ? Number(limit) : 10;
+
     const dronesResult = droneService.getDrones({
       state: state as string | undefined,
       batteryLevel: batteryLevel ? Number(batteryLevel) : undefined,
       model: model as string | undefined,
+      page: pageNumber,
+      limit: limitNumber,
     });
-    res.json({ success: true, data: dronesResult });
+
+    const total = droneService.getTotalDronesCount({
+      state: state as string | undefined,
+      batteryLevel: batteryLevel ? Number(batteryLevel) : undefined,
+      model: model as string | undefined,
+    });
+
+    res.json({
+      success: true,
+      data: dronesResult,
+      metadata: { total, page: pageNumber, limit: limitNumber },
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export const getAvailableDrones = async (_req: Request, res: Response, next: NextFunction) => {
+export const getAvailableDrones = async (
+  { query: { page, limit } }: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
-    const availableDrones = droneService.getAvailableDrones();
-    res.json({ success: true, data: availableDrones });
+    const pageNumber = page ? Number(page) : 1;
+    const limitNumber = limit ? Number(limit) : 10;
+
+    const availableDrones = droneService.getAvailableDrones(pageNumber, limitNumber);
+    const total = droneService.getTotalAvailableDronesCount();
+
+    res.json({
+      success: true,
+      data: availableDrones,
+      metadata: { total, page: pageNumber, limit: limitNumber },
+    });
   } catch (error) {
     next(error);
   }

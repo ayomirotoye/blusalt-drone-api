@@ -11,12 +11,22 @@ import { DroneDto } from '../models/dtos/drone-dto';
 
 const batteryLevelMinimum = process.env.MINIMUM_BATTERY_CAPACITY ?? 25;
 
-export const getAvailableDrones = () => {
+export const getAvailableDrones = (page = 1, limit = 10) => {
+  const offset = (page - 1) * limit;
   const query = `SELECT *
                    FROM drones
-                   WHERE drone_state = ? `;
-  const rows = db.prepare(query).all(DroneState.Idle) as Drone[];
+                   WHERE drone_state = ?
+                   LIMIT ? OFFSET ?`;
+  const rows = db.prepare(query).all(DroneState.Idle, limit, offset) as Drone[];
   return rows.map(droneEntityMapper);
+};
+
+export const getTotalAvailableDronesCount = (): number => {
+  const query = `SELECT COUNT(*) as count
+                   FROM drones
+                   WHERE drone_state = ?`;
+  const result = db.prepare(query).get(DroneState.Idle) as { count: number };
+  return result.count;
 };
 
 export const getBatteryLevel = (droneSerialNumber: string) => {
@@ -36,11 +46,15 @@ export const getDrones = ({
   batteryLevel,
   model,
   serialNumber,
+  page = 1,
+  limit = 10,
 }: {
   state?: string;
   batteryLevel?: number;
   model?: string;
   serialNumber?: string;
+  page?: number;
+  limit?: number;
 }): DroneDto[] => {
   let query = `SELECT *
                  FROM drones
@@ -67,8 +81,52 @@ export const getDrones = ({
     params.push(serialNumber);
   }
 
+  const offset = (page - 1) * limit;
+  query += ` LIMIT ? OFFSET ?`;
+  params.push(limit, offset);
+
   const rows: Drone[] = db.prepare(query).all(...params) as Drone[];
   return rows.map(droneEntityMapper);
+};
+
+export const getTotalDronesCount = ({
+  state,
+  batteryLevel,
+  model,
+  serialNumber,
+}: {
+  state?: string;
+  batteryLevel?: number;
+  model?: string;
+  serialNumber?: string;
+}): number => {
+  let query = `SELECT COUNT(*) as count
+                 FROM drones
+                 WHERE 1 = 1`;
+  const params: (string | number)[] = [];
+
+  if (state) {
+    query += ` AND drone_state = ?`;
+    params.push(state.toUpperCase());
+  }
+
+  if (batteryLevel !== undefined) {
+    query += ` AND battery_capacity = ?`;
+    params.push(Number(batteryLevel));
+  }
+
+  if (model) {
+    query += ` AND model = ?`;
+    params.push(model.toUpperCase());
+  }
+
+  if (serialNumber) {
+    query += ` AND serial_number = ?`;
+    params.push(serialNumber);
+  }
+
+  const result = db.prepare(query).get(...params) as { count: number };
+  return result.count;
 };
 
 export const registerDrone = (registerDrone: DroneRegisterRequest) => {
@@ -81,6 +139,19 @@ export const registerDrone = (registerDrone: DroneRegisterRequest) => {
         `,
   ).run(updatedRequest);
   return updatedRequest;
+};
+
+export const updateDroneState = (droneId: string, newState: DroneState): DroneDto | null => {
+  const result = db
+    .prepare(`UPDATE drones SET drone_state = ? WHERE id = ?`)
+    .run(newState, droneId);
+
+  if (result.changes === 0) {
+    return null;
+  }
+
+  const row = db.prepare(`SELECT * FROM drones WHERE id = ?`).get(droneId) as Drone;
+  return row ? droneEntityMapper(row) : null;
 };
 
 const insertWithTransaction = db.transaction(
@@ -99,6 +170,8 @@ const insertWithTransaction = db.transaction(
         qty: med.quantity ?? 1,
       });
     }
+
+    updateDroneState(droneId, DroneState.Loaded);
   },
 );
 
@@ -143,6 +216,8 @@ export const loadMedications = async (
       newMedications.push({ ...created, quantity: 1 });
     }
   }
+
+  updateDroneState(drone.id, DroneState.Loading);
 
   const newWeight = newMedications.reduce((sum, m) => sum + m.weight * (m.quantity ?? 1), 0);
   const totalWeight = currentWeight + newWeight;
