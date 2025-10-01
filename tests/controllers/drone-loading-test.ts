@@ -3,7 +3,7 @@ import * as droneService from "../../src/services/drone-service";
 // @ts-ignore
 import request from "supertest";
 import app from "../../src";
-import {LoadingRequest} from "../../src/models/requests/loading-request";
+import {LoadingRequest} from "../../src/models/dtos/loading-request";
 import {ApiError} from "../../src/utils/api-error";
 
 jest.mock('../../src/services/drone-service');

@@ -1,16 +1,17 @@
 import { DroneModel } from '../enums/drone-model';
 import { DroneState } from '../enums/drone-state';
+import { DroneDto } from './dtos/drone-dto';
 
 export interface Drone {
   id: string;
-  serialNumber: string;
-  model: DroneModel;
-  weightLimit: number;
-  batteryCapacity: number;
-  droneState: DroneState;
+  serial_number: string;
+  model: string;
+  weight_limit: number;
+  battery_capacity: number;
+  drone_state: string;
 }
 
-export const droneEntityMapper = (row: any): Drone => {
+export const droneEntityMapper = (row: Drone): DroneDto => {
   return {
     id: row.id,
     serialNumber: row.serial_number,
